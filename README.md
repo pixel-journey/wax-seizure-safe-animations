@@ -1,23 +1,14 @@
-# Three flashes a second
+# wax-seizure-safe-animations
 
-**Trust label:** `educational-reference`  
-**Catalog:** [wax-ecosystem-blueprint-catalog](https://github.com/pixel-journey/wax-ecosystem-blueprint-catalog)
+> **Trust label:** `educational-reference`  
+> **Status:** Pure rules + education pass (2026-10-31)
 
-A count threshold. Four flashes in one second is refused. No animation is played.
+**≤3 flashes per second** count check (WCAG 2.3.1 general flash). No animation is played.
 
-The earlier README described a live product. This tree does not ship that.
+```bash
+npm test && npm run dev
+```
 
-## What is actually in the repo
+[POLICY.md](./POLICY.md)
 
-| Piece | Role |
-| --- | --- |
-| `src/flash.ts` | The pure rules |
-| `src/flash.test.ts` | The claims in the verification log |
-| `src/usecases.ts` | HTTP requests, built and not sent |
-| `src/Demo.tsx` | Offline page |
-
-`npm test` runs the rules. `npm run dev` opens the page.
-
-## Queries and unsigned transactions
-
-`executed` is false. This repo did not call any host. No transaction is invented.
+MIT — Pixel Journey
