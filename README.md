@@ -1,21 +1,41 @@
 # wax-seizure-safe-animations
 
 > **Trust label:** `educational-reference`  
-> **Status:** Full-thrust education pass (2026-11-03)
+> **Status:** Full-thrust + polish (2026-11-03)  
+> **Catalog:** [wax-ecosystem-blueprint-catalog](https://github.com/pixel-journey/wax-ecosystem-blueprint-catalog)
 
-**≤3 flashes per second** count check (WCAG 2.3.1 general flash inspiration). No animation is played.
+**One-sentence goal:** Teach a **count-only** flash-rate gate inspired by WCAG 2.3.1 general flash (≤3 / second) — without playing flashing content or claiming medical safety.
+
+## What is actually in the repo
+
+| Piece | Role |
+|-------|------|
+| `src/flash.ts` | `flashAllowed`, max, clamp, policy |
+| `src/*.test.ts` | Boundary and range tests |
+| `src/Demo.tsx` | Interactive counts — **no flash rendered** |
+| `EDUCATION.md` / `POLICY.md` / `SECURITY.md` | Teaching + boundaries |
+
+## Quick start
 
 ```bash
-npm test && npm run dev
+npm install
+npm test
+npm run dev
 ```
 
-| Helper | Role |
-|--------|------|
-| `flashAllowed` | ≤3 Hz verdict |
-| `maxFlashesInWindow` | max count in window |
-| `clampFlashes` | pull request down to max |
-| `flashPolicy` | bundled readout |
+```ts
+import { flashAllowed, clampFlashes } from "./src/flash";
 
-[EDUCATION.md](./EDUCATION.md) · [POLICY.md](./POLICY.md) · [SECURITY.md](./SECURITY.md)
+flashAllowed(3, 1000).allowed; // true
+flashAllowed(4, 1000).allowed; // false
+clampFlashes(10, 1000); // 3
+```
+
+## Related
+
+- `wax-reduced-motion-dashboard`
+- `wax-seizure-safe-pack-opening-canvas`
+
+## License
 
 MIT — Pixel Journey
