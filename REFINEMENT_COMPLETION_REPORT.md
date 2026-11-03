@@ -1,12 +1,14 @@
-# Seizure-safe flash count
+# Full-thrust — flash policy lab
 
-**Updated:** 2026-10-31
+**Updated:** 2026-11-03
 
-| Scope | Notes |
+| Area | Notes |
 |------|-------|
-| Core | flashAllowed |
-| Education | myths, POLICY, interactive demo |
+| Engine | max, clamp, policy, rate milliHz |
+| Tests | 3 vs 4 /s, clamp |
+| Docs | EDUCATION, ARCHITECTURE, POLICY, SECURITY |
+| UI | samples + verdict (no flash rendered) |
 
 ```bash
-npm test
+npm test && npm run dev
 ```

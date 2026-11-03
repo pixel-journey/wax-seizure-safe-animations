@@ -1,5 +1,14 @@
 # Architecture
 
-Allow at most 3 flashes per second. Do not claim a full photosensitive analysis.
+```
+flashes, windowMs
+        │
+        ▼
+flashAllowed → allowed + reason
+        │
+        ├── maxFlashesInWindow
+        ├── clampFlashes
+        └── flashPolicy (bundle)
+```
 
-The page calls the same functions as the tests. It does not open a socket and it does not sign.
+Honesty boundary: no canvas, no media, no medical claims.

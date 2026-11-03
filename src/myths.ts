@@ -1,17 +1,31 @@
 export const FLASH_MYTHS = [
   {
-    myth: "Passing this helper means the animation is fully WCAG-safe",
+    myth: "Passing this check means the animation is medically safe",
     reality:
-      "This is only the general flash *count* threshold (≤3/s). Area and red flash rules are separate.",
+      "Count-only educational gate inspired by WCAG 2.3.1 general flash. Area and red flash are not measured.",
   },
   {
-    myth: "This page plays flashing animations to test them",
-    reality:
-      "No animation is played. Pure arithmetic only.",
+    myth: "This plays or audits a real canvas",
+    reality: "Pure integers. No frames are rendered by these helpers.",
   },
   {
-    myth: "Four flashes over two seconds is the same as four in one second",
+    myth: "3 flashes per second is always fine for every user",
     reality:
-      "Rate depends on windowMs. 4 flashes in 2000 ms is at 2/s and is allowed by this count rule.",
+      "It is a general threshold used in guidance; products should still offer reduced-motion paths.",
+  },
+] as const;
+
+export const GLOSSARY = [
+  {
+    term: "flashAllowed",
+    meaning: "Whether flashes in windowMs stay at ≤3 per second.",
+  },
+  {
+    term: "maxFlashesInWindow",
+    meaning: "floor(3 * windowMs / 1000).",
+  },
+  {
+    term: "clampFlashes",
+    meaning: "min(requested, max allowed in window).",
   },
 ] as const;

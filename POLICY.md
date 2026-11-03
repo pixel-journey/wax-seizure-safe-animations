@@ -1,19 +1,14 @@
-# Policy — seizure-safe flash count
+# Policy — seizure-safe flash lab
 
 **Trust label:** `educational-reference`  
-**Updated:** 2026-10-31
+**Updated:** 2026-11-03
 
 ## In scope
 
-- Pure `flashAllowed(flashes, windowMs)` against ≤3 flashes/second
-- Offline demo
+- Pure flash-count helpers and offline demo
 
 ## Out of scope
 
-- Playing flashes in the browser
-- Full WCAG 2.3.1 (area, red saturation)
-- Medical advice
-
-## Companion
-
-`wax-reduced-motion-dashboard` · `wax-haptic-feedback-simulator`
+- Medical safety certification
+- Area / red-flash analysis
+- Rendering flashing content in the demo
