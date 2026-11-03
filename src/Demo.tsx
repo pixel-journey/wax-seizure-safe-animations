@@ -1,16 +1,49 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { Cases } from "./Cases";
+import { downloadText, exportFlashMarkdown } from "./exportReport";
 import {
   clampFlashes,
   flashPolicy,
   SAMPLE_FLASHES,
 } from "./flash";
 import { FLASH_MYTHS, GLOSSARY } from "./myths";
+import { decodeShareState, encodeShareState } from "./shareState";
+
+const LS_KEY = "pxj-flash-policy-v1";
 
 export function Demo() {
   const [flashes, setFlashes] = useState("3");
   const [windowMs, setWindowMs] = useState("1000");
+  const [shareMsg, setShareMsg] = useState("");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const fromUrl = decodeShareState(window.location.search);
+    if (fromUrl.flashes || fromUrl.windowMs) {
+      if (fromUrl.flashes) setFlashes(fromUrl.flashes);
+      if (fromUrl.windowMs) setWindowMs(fromUrl.windowMs);
+      return;
+    }
+    try {
+      const raw = localStorage.getItem(LS_KEY);
+      if (!raw) return;
+      const p = JSON.parse(raw) as { flashes?: string; windowMs?: string };
+      if (p.flashes) setFlashes(p.flashes);
+      if (p.windowMs) setWindowMs(p.windowMs);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(LS_KEY, JSON.stringify({ flashes, windowMs }));
+    } catch {
+      /* ignore */
+    }
+  }, [flashes, windowMs]);
 
   const policy = useMemo(() => {
     try {
@@ -26,6 +59,20 @@ export function Demo() {
       };
     }
   }, [flashes, windowMs]);
+
+  const copyShare = async () => {
+    const qs = encodeShareState({ flashes, windowMs });
+    const path =
+      typeof window !== "undefined"
+        ? `${window.location.origin}${window.location.pathname}?${qs}`
+        : `?${qs}`;
+    try {
+      await navigator.clipboard.writeText(path);
+      setShareMsg("Share URL copied");
+    } catch {
+      setShareMsg(path);
+    }
+  };
 
   return (
     <main className="wrap">
@@ -99,18 +146,46 @@ export function Demo() {
             <strong>{policy.clamped}</strong> · rate milliHz:{" "}
             <strong>{policy.p.rateMilliHz}</strong>
           </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+            <button
+              type="button"
+              onClick={() =>
+                downloadText(
+                  "flash-policy.md",
+                  exportFlashMarkdown({
+                    flashes,
+                    windowMs,
+                    allowed: String(policy.p.allowed),
+                    reason: policy.p.reason,
+                    maxFlashes: String(policy.p.maxFlashes),
+                    clamped: String(policy.clamped),
+                  })
+                )
+              }
+            >
+              Download MD
+            </button>
+            <button type="button" onClick={() => void copyShare()}>
+              Copy share URL
+            </button>
+          </div>
+          {shareMsg && (
+            <p style={{ fontSize: "0.85rem", opacity: 0.8 }}>{shareMsg}</p>
+          )}
         </>
       ) : (
         <p>{policy.reason}</p>
       )}
 
+      <Cases />
+
       <section style={{ marginTop: "2rem" }}>
         <h2 style={{ fontSize: "1rem" }}>Runbook</h2>
         <ol style={{ fontSize: "0.9rem" }}>
-          <li>Count planned full-screen-ish flashes in a time window.</li>
-          <li>Run flashAllowed / flashPolicy before shipping an effect.</li>
+          <li>Count planned flashes in a time window.</li>
+          <li>Run flashPolicy before shipping an effect.</li>
           <li>Prefer clampFlashes or a static alternative when refused.</li>
-          <li>Still offer reduced-motion paths (see reduced-motion dashboard).</li>
+          <li>Still offer reduced-motion paths.</li>
         </ol>
       </section>
 
@@ -129,7 +204,7 @@ export function Demo() {
       </section>
 
       <p style={{ marginTop: "2rem", fontSize: "0.85rem", opacity: 0.75 }}>
-        See EDUCATION.md · POLICY.md · SECURITY.md · companion: wax-reduced-motion-dashboard
+        URL overrides localStorage when present. See EDUCATION.md · SECURITY.md
       </p>
     </main>
   );

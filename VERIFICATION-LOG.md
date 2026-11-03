@@ -6,5 +6,5 @@
 | --- | --- |
 | 3/s allowed, 4/s refused | unit |
 | maxFlashes / clamp / policy | unit |
-| Area / red flash | out of scope |
-| Animation playback | out of scope |
+| shareState | unit |
+| Area / red flash / playback | out of scope |
