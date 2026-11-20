@@ -2,7 +2,7 @@
 
 > **Trust label:** `educational-reference`  
 > **Status:** Full-thrust + polish (2026-11-03)  
-> **Catalog:** [wax-ecosystem-blueprint-catalog](https://github.com/pixel-journey/wax-ecosystem-blueprint-catalog)
+> **Catalog:** `wax-ecosystem-blueprint-catalog` (private index; not this public course)
 
 **One-sentence goal:** Teach a **count-only** flash-rate gate inspired by WCAG 2.3.1 general flash (≤3 / second) — without playing flashing content or claiming medical safety.
 
@@ -14,6 +14,8 @@
 | `src/*.test.ts` | Boundary and range tests |
 | `src/Demo.tsx` | Interactive counts — **no flash rendered** |
 | `EDUCATION.md` / `POLICY.md` / `SECURITY.md` | Teaching + boundaries |
+
+The course is [EDUCATION.md](EDUCATION.md).
 
 ## Quick start
 
