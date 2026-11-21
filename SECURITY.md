@@ -1,21 +1,40 @@
-# Security notes
+# Security — flash rate clamp (max 3/s)
 
-**Trust label:** `educational-reference`
+## Closed in tests
 
-## What this package does not do
+| Issue | Behavior |
+| --- | --- |
+| `flashAllowed(3, 1000)` | allowed (equal boundary) |
+| `flashAllowed(4, 1000)` | not allowed |
+| `clampFlashes(10, 1000)` | **3** |
+| `clampFlashes(2, 1000)` | **2** (no raise) |
+| Window under 334 ms | `maxFlashesInWindow` → **0** |
 
-- No private keys, wallets, or signing
-- No canvas or video playback of flashing content
-- No medical or clinical clearance
-- No WCAG area / red-flash measurement
+## Not closed (production)
 
-## Host-product guidance
+| Concern | Guidance |
+| --- | --- |
+| Area / red flash | Not measured — WCAG 2.3.1 needs more than rate |
+| Canvas / video playback | Host must apply the count; this lab does not animate |
+| Medical / clinical claims | Forbidden marketing |
+| `prefers-reduced-motion` | Host concern; pair with [reduced-motion dashboard](https://github.com/pixel-journey/wax-reduced-motion-dashboard) |
 
-- Prefer failing closed with `clampFlashes` or a static alternative when `flashAllowed` is false.
-- Pair with `wax-reduced-motion-dashboard` for preference-based motion reduction.
-- Share URLs only encode flash counts / windows — not auth tokens.
-- Do not market educational verdicts as “seizure-proof.”
+## Attack angles
 
-## Supply-chain
+1. Marketing "seizure-proof" from a pure rate check.  
+2. Using pack-collapse (`shown: 1`) where clamp-to-3 was intended.  
+3. Ignoring area / brightness / red thresholds in the WCAG understanding doc.  
+4. Animating anyway when `flashAllowed` is false.  
+5. Claiming WCAG conformance from unit tests alone.
 
-Correctness is locked by pure unit tests (3/s boundary, clamp, ranges). Pin dependencies for any public deploy.
+## Honesty limits
+
+Nothing is animated. Not a medical clearance. Not a full WCAG 2.3.1 measurement.
+
+| Sibling | Excess behavior |
+| --- | --- |
+| **This (animations)** | **clamp** to 3/s |
+| [pack-opening canvas](https://github.com/pixel-journey/wax-seizure-safe-pack-opening-canvas) | collapse to **shown: 1** |
+| [reduced-motion](https://github.com/pixel-journey/wax-reduced-motion-dashboard) | frames → 1, duration → 0 |
+
+[WCAG understanding](https://www.w3.org/WAI/WCAG22/Understanding/three-flashes-or-below-threshold.html).
